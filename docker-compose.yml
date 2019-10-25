@@ -1,14 +1,14 @@
 version: '0.1'
 
 services:
-  redis:
-    image: huyifan/distributeddatabase-redis:v0.2
-    ports:
-      - "6379:6379"
-    restart: on-failure
-    container_name: distributeddatabase-redis
-    privileged: true
-    tty: true
+#  redis:
+#    image: huyifan/distributeddatabase-redis:v0.2
+#    ports:
+#      - "6379:6379"
+#    restart: on-failure
+#    container_name: distributeddatabase-redis
+#    privileged: true
+#    tty: true
   ethereum:
     image: huyifan/distributeddatabase-ethereum:v0.2
     ports:
@@ -25,4 +25,20 @@ services:
       - "4001:4001"
     restart: on-failure
     container_name: distributeddatabase-ipfs
+    tty: true
+  mysql:
+    image: chenzhou/mysql:v0.1
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD : root
+    restart: on-failure
+    container_name: mysql
+    tty: true
+  canal:
+    image: canal/canal-server
+    ports:
+      - "11111:11111"
+    restart: on-failure
+    container_name: canal
     tty: true

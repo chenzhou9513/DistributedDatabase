@@ -1,0 +1,25 @@
+FROM centos:7.6.1810
+RUN  yum -y install epel-release && yum -y install golang
+RUN yum -y install wget && wget https://github.com/ethereum/go-ethereum/archive/v1.8.27.tar.gz && tar -zxvf v1.8.27.tar.gz
+RUN rpm --rebuilddb && yum -y install gcc automake autoconf libtool make && yum -y install gcc gcc-c++
+WORKDIR go-ethereum-1.8.27
+RUN  make all
+COPY ./conf/start-ethereum.sh build/bin/
+COPY ./conf/genesis.json build/bin/
+WORKDIR build/bin
+RUN mkdir chain && ./geth --datadir chain  --rpc   --rpccorsdomain "*" init genesis.json
+ENTRYPOINT ["sh","start-ethereum.sh"]
+
+
+FROM mysql
+
+EXPOSE 3306
+
+COPY ./my.cnf /etc/mysql/my.cnf
+
+CMD ["mysqld"]
+
+
+
+
+
